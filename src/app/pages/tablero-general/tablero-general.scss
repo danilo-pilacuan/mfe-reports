@@ -1,0 +1,58 @@
+h2 {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+}
+
+h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.distribucion {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--ph-borde, #d5dae2);
+  border-radius: var(--ph-radio, 8px);
+  background: var(--ph-superficie, #fff);
+}
+
+.barras {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  li {
+    display: grid;
+    grid-template-columns: 160px 1fr 2.5rem;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+.etiqueta {
+  font-size: 0.8125rem;
+  color: var(--ph-texto-suave, #5b6472);
+}
+
+.barra {
+  height: 0.75rem;
+  min-width: 2px;
+  border-radius: 4px;
+  background: var(--ph-primario, #1f5eff);
+}
+
+.cantidad {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-align: right;
+}

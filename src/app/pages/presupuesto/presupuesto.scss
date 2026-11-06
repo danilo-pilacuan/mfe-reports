@@ -1,0 +1,52 @@
+h2 {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+}
+
+.tabla-presupuesto {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--ph-superficie, #fff);
+  border: 1px solid var(--ph-borde, #d5dae2);
+  border-radius: var(--ph-radio, 8px);
+  overflow: hidden;
+
+  th,
+  td {
+    padding: 0.55rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--ph-borde, #d5dae2);
+    font-size: 0.875rem;
+  }
+
+  th {
+    background: var(--ph-fondo, #f4f6fa);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--ph-texto-suave, #5b6472);
+  }
+
+  tfoot td {
+    font-weight: 700;
+    border-bottom: none;
+  }
+
+  .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .negativa {
+    color: var(--ph-peligro, #c62828);
+    font-weight: 600;
+  }
+
+  .positiva {
+    color: var(--ph-exito, #2e7d32);
+  }
+
+  .excedido td:first-child {
+    box-shadow: inset 3px 0 0 var(--ph-peligro, #c62828);
+  }
+}

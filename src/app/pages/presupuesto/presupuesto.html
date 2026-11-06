@@ -1,0 +1,36 @@
+<h2>Presupuesto asignado vs consumido</h2>
+
+<table class="tabla-presupuesto">
+  <thead>
+    <tr>
+      <th>Proyecto</th>
+      <th class="num">Asignado</th>
+      <th class="num">Consumido</th>
+      <th class="num">Desviacion</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (f of filas(); track f.id) {
+      <tr [class.excedido]="f.excedido">
+        <td>{{ f.nombre }}</td>
+        <td class="num">{{ intl.monto(f.asignado) }}</td>
+        <td class="num">{{ intl.monto(f.consumido) }}</td>
+        <td class="num" [class.negativa]="f.desviacion > 0" [class.positiva]="f.desviacion < 0">
+          {{ intl.monto(f.desviacion) }}
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="4">Sin proyectos para reportar.</td>
+      </tr>
+    }
+  </tbody>
+  <tfoot>
+    <tr>
+      <td>Total</td>
+      <td class="num">{{ intl.monto(totalAsignado()) }}</td>
+      <td class="num">{{ intl.monto(totalConsumido()) }}</td>
+      <td class="num">{{ intl.monto(totalConsumido() - totalAsignado()) }}</td>
+    </tr>
+  </tfoot>
+</table>

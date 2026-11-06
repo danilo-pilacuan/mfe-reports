@@ -1,0 +1,39 @@
+<h2>Tablero general</h2>
+
+<div class="kpis">
+  <ph-summary-widget titulo="Proyectos" [valor]="intl.numero(totalProyectos())" />
+  <ph-summary-widget titulo="Activos" [valor]="intl.numero(activos())" />
+  <ph-summary-widget titulo="Avance promedio" [valor]="intl.porcentaje(avancePromedio())" />
+  <ph-summary-widget
+    titulo="Presupuesto consumido"
+    [valor]="intl.monto(presupuestoConsumido())"
+    [detalle]="'de ' + intl.monto(presupuestoAsignado())"
+    [tendencia]="excedidos() > 0 ? 'negativa' : 'positiva'"
+  />
+</div>
+
+<section class="distribucion">
+  <h3>Proyectos por etapa del ciclo de vida</h3>
+  <ul class="barras">
+    @for (fila of porEtapa(); track fila.etapa) {
+      <li>
+        <span class="etiqueta">{{ fila.etapa }}</span>
+        <span class="barra" [style.width.%]="totalProyectos() === 0 ? 0 : (fila.cantidad * 100) / totalProyectos()"></span>
+        <span class="cantidad">{{ fila.cantidad }}</span>
+      </li>
+    }
+  </ul>
+</section>
+
+<section class="distribucion">
+  <h3>Proyectos por estado</h3>
+  <ul class="barras">
+    @for (fila of porEstado(); track fila.estado) {
+      <li>
+        <span class="etiqueta">{{ fila.estado }}</span>
+        <span class="barra" [style.width.%]="totalProyectos() === 0 ? 0 : (fila.cantidad * 100) / totalProyectos()"></span>
+        <span class="cantidad">{{ fila.cantidad }}</span>
+      </li>
+    }
+  </ul>
+</section>

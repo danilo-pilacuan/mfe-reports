@@ -1,0 +1,59 @@
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { IntlFormat, SummaryWidget } from '@projecthub/ui';
+import { ETAPAS_CICLO_VIDA, ETIQUETA_ETAPA, ETIQUETA_ESTADO, ProjectStore } from '@projecthub/shared';
+
+/**
+ * Tablero general de indicadores (7.4): KPIs del portafolio, conteo de
+ * proyectos por etapa (7.1) y por estado (7.2). Solo lectura.
+ */
+@Component({
+  selector: 'app-tablero-general',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SummaryWidget],
+  templateUrl: './tablero-general.html',
+  styleUrl: './tablero-general.scss',
+})
+export class TableroGeneral {
+  private readonly store = inject(ProjectStore);
+  protected readonly intl = inject(IntlFormat);
+
+  protected readonly resumenes = computed(() => this.store.resumenes());
+
+  protected readonly totalProyectos = computed(() => this.resumenes().length);
+
+  protected readonly activos = computed(
+    () => this.resumenes().filter((r) => r.proyecto.estado === 'Activo').length,
+  );
+
+  protected readonly avancePromedio = computed(() => {
+    const rs = this.resumenes();
+    if (rs.length === 0) return 0;
+    return Math.round((rs.reduce((acc, r) => acc + r.avance, 0) / rs.length) * 10) / 10;
+  });
+
+  protected readonly presupuestoAsignado = computed(() =>
+    this.resumenes().reduce((acc, r) => acc + r.presupuestoAsignado, 0),
+  );
+
+  protected readonly presupuestoConsumido = computed(() =>
+    this.resumenes().reduce((acc, r) => acc + r.presupuestoConsumido, 0),
+  );
+
+  protected readonly excedidos = computed(
+    () => this.resumenes().filter((r) => r.excedido).length,
+  );
+
+  protected readonly porEtapa = computed(() =>
+    ETAPAS_CICLO_VIDA.map((etapa) => ({
+      etapa: ETIQUETA_ETAPA[etapa],
+      cantidad: this.resumenes().filter((r) => r.proyecto.etapa === etapa).length,
+    })),
+  );
+
+  protected readonly porEstado = computed(() =>
+    (Object.keys(ETIQUETA_ESTADO) as Array<keyof typeof ETIQUETA_ESTADO>).map((estado) => ({
+      estado: ETIQUETA_ESTADO[estado],
+      cantidad: this.resumenes().filter((r) => r.proyecto.estado === estado).length,
+    })),
+  );
+}
