@@ -8,6 +8,7 @@ export default withNativeFederation({
 
   exposes: {
     './Module': './src/app/app.routes.ts',
+    './Widget': './src/app/widgets/portfolio-kpi.widget.ts',
   },
 
   //shareScope: autoShareScope({level: 'minor'}),
