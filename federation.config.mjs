@@ -3,6 +3,11 @@
 export default withNativeFederation({
   name: 'mfe-reports',
 
+  exposes: {
+    './Module': './src/app/app.routes.ts',
+    './Widget': './src/app/widgets/portfolio-kpi.widget.ts',
+  },
+
   shared: fromPackageJson({
     singleton: true,
     strictVersion: true,
