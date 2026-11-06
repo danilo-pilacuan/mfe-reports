@@ -1,5 +1,9 @@
 <h2>Tablero general</h2>
 
+<div class="acciones-reporte">
+  <button type="button" class="boton" (click)="exportarCsv()">Exportar CSV</button>
+</div>
+
 <div class="kpis">
   <ph-summary-widget titulo="Proyectos" [valor]="intl.numero(totalProyectos())" />
   <ph-summary-widget titulo="Activos" [valor]="intl.numero(activos())" />

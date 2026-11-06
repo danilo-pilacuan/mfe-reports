@@ -1,6 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { IntlFormat, SummaryWidget } from '@projecthub/ui';
-import { ETAPAS_CICLO_VIDA, ETIQUETA_ETAPA, ETIQUETA_ESTADO, ProjectStore } from '@projecthub/shared';
+import {
+  ETAPAS_CICLO_VIDA,
+  ETIQUETA_ETAPA,
+  ETIQUETA_ESTADO,
+  ProjectStore,
+  descargarArchivo,
+  nombreConFecha,
+  serializarCsv,
+} from '@projecthub/shared';
 
 /**
  * Tablero general de indicadores (7.4): KPIs del portafolio, conteo de
@@ -56,4 +64,23 @@ export class TableroGeneral {
       cantidad: this.resumenes().filter((r) => r.proyecto.estado === estado).length,
     })),
   );
+
+  /** Exporta el detalle por proyecto que alimenta los KPIs (7.5). */
+  protected exportarCsv(): void {
+    const filas = this.resumenes().map((r) => ({
+      Proyecto: r.proyecto.nombre,
+      Etapa: ETIQUETA_ETAPA[r.proyecto.etapa],
+      Estado: ETIQUETA_ESTADO[r.proyecto.estado],
+      'Avance %': r.avance,
+      'Presupuesto asignado': r.presupuestoAsignado,
+      'Presupuesto consumido': r.presupuestoConsumido,
+      Desviacion: r.desviacion,
+      Excedido: r.excedido ? 'si' : 'no',
+    }));
+    descargarArchivo(
+      serializarCsv(filas),
+      nombreConFecha('tablero-general'),
+      'text/csv;charset=utf-8',
+    );
+  }
 }

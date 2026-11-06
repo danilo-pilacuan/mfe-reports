@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { IntlFormat } from '@projecthub/ui';
-import { ProjectStore } from '@projecthub/shared';
+import { ProjectStore, descargarArchivo, nombreConFecha, serializarCsv } from '@projecthub/shared';
 
 interface FilaPresupuesto {
   id: string;
@@ -47,4 +47,20 @@ export class Presupuesto {
   protected readonly totalConsumido = computed(() =>
     this.filas().reduce((acc, f) => acc + f.consumido, 0),
   );
+
+  /** Exporta el reporte a CSV (docs/funcionalidades.md 7.5). */
+  protected exportarCsv(): void {
+    const filas = this.filas().map((f) => ({
+      Proyecto: f.nombre,
+      Asignado: f.asignado,
+      Consumido: f.consumido,
+      Desviacion: f.desviacion,
+      Excedido: f.excedido ? 'si' : 'no',
+    }));
+    descargarArchivo(
+      serializarCsv(filas),
+      nombreConFecha('presupuesto'),
+      'text/csv;charset=utf-8',
+    );
+  }
 }

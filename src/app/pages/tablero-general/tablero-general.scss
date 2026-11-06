@@ -3,6 +3,25 @@ h2 {
   font-size: 1.25rem;
 }
 
+.acciones-reporte {
+  margin-bottom: 0.75rem;
+}
+
+.boton {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--ph-borde, #d5dae2);
+  border-radius: var(--ph-radio, 8px);
+  background: var(--ph-superficie, #fff);
+  color: var(--ph-texto, #1c2430);
+  font: inherit;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--ph-primario, #1f5eff);
+    color: var(--ph-primario, #1f5eff);
+  }
+}
+
 h3 {
   margin: 0 0 0.75rem;
   font-size: 1rem;
