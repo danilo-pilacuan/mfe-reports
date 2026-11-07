@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { MatButton } from '@angular/material/button';
 import { IntlFormat, SummaryWidget } from '@projecthub/ui';
 import {
   ETAPAS_CICLO_VIDA,
@@ -17,7 +18,7 @@ import {
 @Component({
   selector: 'app-tablero-general',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SummaryWidget],
+  imports: [SummaryWidget, MatButton],
   templateUrl: './tablero-general.html',
   styleUrl: './tablero-general.scss',
 })

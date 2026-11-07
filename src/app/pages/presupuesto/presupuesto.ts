@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { MatButton } from '@angular/material/button';
 import { IntlFormat } from '@projecthub/ui';
 import { ProjectStore, descargarArchivo, nombreConFecha, serializarCsv } from '@projecthub/shared';
 
@@ -18,7 +19,7 @@ interface FilaPresupuesto {
 @Component({
   selector: 'app-presupuesto',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [],
+  imports: [MatButton],
   templateUrl: './presupuesto.html',
   styleUrl: './presupuesto.scss',
 })

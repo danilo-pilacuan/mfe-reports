@@ -8,6 +8,9 @@ h2 {
 }
 
 .boton {
+  --mat-button-filled-container-color: var(--ph-primario, #1f5eff);
+  --mat-button-filled-label-text-color: #fff;
+
   padding: 0.4rem 0.9rem;
   border: 1px solid var(--ph-borde, #d5dae2);
   border-radius: var(--ph-radio, 8px);

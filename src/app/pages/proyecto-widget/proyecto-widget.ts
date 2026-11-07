@@ -1,5 +1,8 @@
 import { ChangeDetectionStrategy, Component, Type, computed, inject, signal } from '@angular/core';
 import { NgComponentOutlet } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { loadRemoteModule } from '@angular-architects/native-federation';
 import { ProjectStore } from '@projecthub/shared';
 
@@ -17,12 +20,16 @@ import { ProjectStore } from '@projecthub/shared';
       <code>mfe-reports</code> directamente por federacion.
     </p>
     <label class="selector">
-      Proyecto
-      <select (change)="cargar($event)" [value]="proyectoId()">
+      <span>Proyecto</span>
+      <mat-select
+        class="selector-select"
+        [value]="proyectoId()"
+        (selectionChange)="cargar($any($event).value)"
+      >
         @for (p of proyectos(); track p.id) {
-          <option [value]="p.id">{{ p.nombre }}</option>
+          <mat-option [value]="p.id">{{ p.nombre }}</mat-option>
         }
-      </select>
+      </mat-select>
     </label>
 
     @if (error()) {
@@ -49,6 +56,15 @@ import { ProjectStore } from '@projecthub/shared';
         gap: 0.5rem;
         margin: 1rem 0;
         font-size: 0.875rem;
+
+        span {
+          color: var(--ph-texto-suave, #5b6472);
+        }
+      }
+
+      .selector-select {
+        width: 22rem;
+        max-width: 100%;
       }
       .fallo {
         padding: 0.75rem;
@@ -59,7 +75,7 @@ import { ProjectStore } from '@projecthub/shared';
       }
     `,
   ],
-  imports: [NgComponentOutlet],
+  imports: [NgComponentOutlet, MatSelectModule, MatFormFieldModule, MatInputModule],
 })
 export class ProyectoWidget {  private readonly store = inject(ProjectStore);
 
@@ -75,8 +91,7 @@ export class ProyectoWidget {  private readonly store = inject(ProjectStore);
     this.cargarWidget();
   }
 
-  protected cargar(event: Event): void {
-    const valor = (event.target as HTMLSelectElement).value;
+  protected cargar(valor: string): void {
     this.proyectoId.set(valor);
   }
 

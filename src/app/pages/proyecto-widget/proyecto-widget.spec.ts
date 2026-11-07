@@ -1,4 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { MatSelect } from '@angular/material/select';
 import { ProyectoWidget } from './proyecto-widget';
 
 describe('ProyectoWidget', () => {
@@ -9,9 +11,10 @@ describe('ProyectoWidget', () => {
 
     const fixture = TestBed.createComponent(ProyectoWidget);
     await fixture.whenStable();
-    const el = fixture.nativeElement as HTMLElement;
+    fixture.detectChanges();
 
-    const opciones = el.querySelectorAll('select option');
-    expect(opciones.length).toBeGreaterThan(0);
+    const select = fixture.debugElement.query(By.css('mat-select'))
+      .componentInstance as MatSelect;
+    expect(select.options.length).toBeGreaterThan(0);
   });
 });
