@@ -6,37 +6,27 @@
   <button type="button" mat-button class="boton" (click)="exportarCsv()">Exportar CSV</button>
 </div>
 
-<table class="tabla-presupuesto">
-  <thead>
-    <tr>
-      <th>Proyecto</th>
-      <th class="num">Asignado</th>
-      <th class="num">Consumido</th>
-      <th class="num">Desviacion</th>
-    </tr>
-  </thead>
-  <tbody>
-    @for (f of filas(); track f.id) {
-      <tr [class.excedido]="f.excedido">
-        <td>{{ f.nombre }}</td>
-        <td class="num">{{ intl.monto(f.asignado) }}</td>
-        <td class="num">{{ intl.monto(f.consumido) }}</td>
-        <td class="num" [class.negativa]="f.desviacion > 0" [class.positiva]="f.desviacion < 0">
-          {{ intl.monto(f.desviacion) }}
-        </td>
-      </tr>
-    } @empty {
-      <tr>
-        <td colspan="4">Sin proyectos para reportar.</td>
-      </tr>
-    }
-  </tbody>
-  <tfoot>
-    <tr>
-      <td>Total</td>
-      <td class="num">{{ intl.monto(totalAsignado()) }}</td>
-      <td class="num">{{ intl.monto(totalConsumido()) }}</td>
-      <td class="num">{{ intl.monto(totalConsumido() - totalAsignado()) }}</td>
-    </tr>
-  </tfoot>
-</table>
+<ph-data-table
+  [filas]="filasConEstilo()"
+  [pie]="filaTotal()"
+  textoVacio="Sin proyectos para reportar."
+>
+  <ph-data-table-column name="nombre" header="Proyecto" />
+  <ph-data-table-column name="asignado" header="Asignado" align="right">
+    <ng-template #cell let-fila>
+      <span [class.negativa]="fila['excedido']">{{ intl.monto(fila['asignado']) }}</span>
+    </ng-template>
+  </ph-data-table-column>
+  <ph-data-table-column name="consumido" header="Consumido" align="right">
+    <ng-template #cell let-fila>
+      <span>{{ intl.monto(fila['consumido']) }}</span>
+    </ng-template>
+  </ph-data-table-column>
+  <ph-data-table-column name="desviacion" header="Desviacion" align="right">
+    <ng-template #cell let-fila>
+      <span [class.negativa]="fila['desviacion'] > 0" [class.positiva]="fila['desviacion'] < 0">
+        {{ intl.monto(fila['desviacion']) }}
+      </span>
+    </ng-template>
+  </ph-data-table-column>
+</ph-data-table>

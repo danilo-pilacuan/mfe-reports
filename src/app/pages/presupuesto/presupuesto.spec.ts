@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 import { Presupuesto } from './presupuesto';
 
 describe('Presupuesto', () => {
-  it('lista proyectos con montos formateados y totales', async () => {
+  it('lista proyectos con montos formateados y fila de totales', async () => {
     await TestBed.configureTestingModule({
       imports: [Presupuesto],
       providers: [provideRouter([])],
@@ -23,7 +23,7 @@ describe('Presupuesto', () => {
     expect(texto).toContain('$');
     expect(texto).toContain('Total');
 
-    const pie = el.querySelectorAll('tfoot td');
+    const pie = el.querySelectorAll('tr.mat-mdc-footer-row td');
     expect(pie.length).toBe(4);
   });
 });

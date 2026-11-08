@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
-import { IntlFormat, SectionNav } from '@projecthub/ui';
+import { DataTable, DataTableColumn, DataTableFila, IntlFormat, SectionNav } from '@projecthub/ui';
 import { ProjectStore, descargarArchivo, nombreConFecha, serializarCsv } from '@projecthub/shared';
 
 interface FilaPresupuesto {
@@ -19,7 +19,7 @@ interface FilaPresupuesto {
 @Component({
   selector: 'app-presupuesto',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SectionNav, MatButton],
+  imports: [SectionNav, MatButton, DataTable, DataTableColumn],
   templateUrl: './presupuesto.html',
   styleUrl: './presupuesto.scss',
 })
@@ -54,6 +54,25 @@ export class Presupuesto {
   protected readonly totalConsumido = computed(() =>
     this.filas().reduce((acc, f) => acc + f.consumido, 0),
   );
+
+  /** Filas para ph-data-table: marca excedido para resaltar asignado. */
+  protected readonly filasConEstilo = computed<DataTableFila[]>(() =>
+    this.filas().map((f) => ({
+      nombre: f.nombre,
+      asignado: f.asignado,
+      consumido: f.consumido,
+      desviacion: f.desviacion,
+      excedido: f.excedido,
+    })),
+  );
+
+  /** Fila de pie (totales) para ph-data-table. */
+  protected readonly filaTotal = computed<DataTableFila>(() => ({
+    nombre: 'Total',
+    asignado: this.totalAsignado(),
+    consumido: this.totalConsumido(),
+    desviacion: this.totalConsumido() - this.totalAsignado(),
+  }));
 
   /** Exporta el reporte a CSV (docs/funcionalidades.md 7.5). */
   protected exportarCsv(): void {
