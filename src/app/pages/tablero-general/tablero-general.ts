@@ -7,6 +7,8 @@ import {
   ETIQUETA_ESTADO,
   ProjectStore,
   descargarArchivo,
+  generarHtmlPdf,
+  imprimirPdf,
   nombreConFecha,
   serializarCsv,
 } from '@projecthub/shared';
@@ -89,5 +91,47 @@ export class TableroGeneral {
       nombreConFecha('tablero-general'),
       'text/csv;charset=utf-8',
     );
+  }
+
+  /** Abre el dialogo de impresion con el reporte listo para guardar como PDF (7.5). */
+  protected exportarPdf(): void {
+    const filas = this.resumenes().map(
+      (r) =>
+        [
+          r.proyecto.nombre,
+          ETIQUETA_ETAPA[r.proyecto.etapa],
+          ETIQUETA_ESTADO[r.proyecto.estado],
+          this.intl.porcentaje(r.avance),
+          this.intl.monto(r.presupuestoAsignado),
+          this.intl.monto(r.presupuestoConsumido),
+          r.excedido ? 'si' : 'no',
+        ] as string[],
+    );
+    const tablas = [
+      {
+        titulo: 'Detalle por proyecto',
+        columnas: [
+          { encabezado: 'Proyecto' },
+          { encabezado: 'Etapa' },
+          { encabezado: 'Estado' },
+          { encabezado: 'Avance', alineacion: 'der' as const },
+          { encabezado: 'Asignado', alineacion: 'der' as const },
+          { encabezado: 'Consumido', alineacion: 'der' as const },
+          { encabezado: 'Excedido' },
+        ],
+        filas,
+      },
+      {
+        titulo: 'Proyectos por etapa del ciclo de vida',
+        columnas: [{ encabezado: 'Etapa' }, { encabezado: 'Cantidad', alineacion: 'der' as const }],
+        filas: this.porEtapa().map((f) => [f.etapa, String(f.cantidad)]),
+      },
+      {
+        titulo: 'Proyectos por estado',
+        columnas: [{ encabezado: 'Estado' }, { encabezado: 'Cantidad', alineacion: 'der' as const }],
+        filas: this.porEstado().map((f) => [f.estado, String(f.cantidad)]),
+      },
+    ];
+    imprimirPdf(generarHtmlPdf('Tablero general de indicadores', tablas), 'tablero-general');
   }
 }

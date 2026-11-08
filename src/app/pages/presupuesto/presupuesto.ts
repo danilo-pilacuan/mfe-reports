@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { DataTable, DataTableColumn, DataTableFila, IntlFormat, SectionNav } from '@projecthub/ui';
-import { ProjectStore, descargarArchivo, nombreConFecha, serializarCsv } from '@projecthub/shared';
+import { ProjectStore, descargarArchivo, generarHtmlPdf, imprimirPdf, nombreConFecha, serializarCsv } from '@projecthub/shared';
 
 interface FilaPresupuesto {
   id: string;
@@ -88,5 +88,35 @@ export class Presupuesto {
       nombreConFecha('presupuesto'),
       'text/csv;charset=utf-8',
     );
+  }
+
+  /** Abre el dialogo de impresion con el reporte listo para guardar como PDF (7.5). */
+  protected exportarPdf(): void {
+    const tablas = [
+      {
+        titulo: 'Presupuesto asignado vs consumido',
+        columnas: [
+          { encabezado: 'Proyecto' },
+          { encabezado: 'Asignado', alineacion: 'der' as const },
+          { encabezado: 'Consumido', alineacion: 'der' as const },
+          { encabezado: 'Desviacion', alineacion: 'der' as const },
+          { encabezado: 'Excedido' },
+        ],
+        filas: this.filas().map((f) => [
+          f.nombre,
+          this.intl.monto(f.asignado),
+          this.intl.monto(f.consumido),
+          this.intl.monto(f.desviacion),
+          f.excedido ? 'si' : 'no',
+        ]),
+        pie: [
+          'Total',
+          this.intl.monto(this.totalAsignado()),
+          this.intl.monto(this.totalConsumido()),
+          this.intl.monto(this.totalConsumido() - this.totalAsignado()),
+        ],
+      },
+    ];
+    imprimirPdf(generarHtmlPdf('Reporte de presupuesto', tablas), 'presupuesto');
   }
 }
