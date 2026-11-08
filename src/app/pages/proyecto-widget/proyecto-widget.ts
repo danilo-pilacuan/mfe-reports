@@ -3,8 +3,7 @@ import { NgComponentOutlet } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { loadRemoteModule } from '@angular-architects/native-federation';
-import { ProjectStore } from '@projecthub/shared';
+import { ProjectStore, remoteModuleLoader } from '@projecthub/shared';
 
 /**
  * Consumo remote a remote (8.5): mfe-reports carga ProjectSummaryWidget
@@ -77,7 +76,9 @@ import { ProjectStore } from '@projecthub/shared';
   ],
   imports: [NgComponentOutlet, MatSelectModule, MatFormFieldModule, MatInputModule],
 })
-export class ProyectoWidget {  private readonly store = inject(ProjectStore);
+export class ProyectoWidget {
+  private readonly store = inject(ProjectStore);
+  private readonly cargarRemoto = remoteModuleLoader();
 
   protected readonly proyectos = this.store.proyectos;
   protected readonly proyectoId = signal(this.store.proyectos()[0]?.id ?? '');
@@ -98,9 +99,13 @@ export class ProyectoWidget {  private readonly store = inject(ProjectStore);
   private cargarWidget(): void {
     this.cargando.set(true);
     this.error.set(null);
-    loadRemoteModule('mfe-projects', './Widget')
-      .then((m: { ProjectSummaryWidget: Type<unknown> }) => {
-        this.widget.set(m.ProjectSummaryWidget);
+    this.cargarRemoto('mfe-projects', './Widget')
+      .then((m) => {
+        const widget = (m as Record<string, unknown>)['ProjectSummaryWidget'];
+        if (typeof widget !== 'function') {
+          throw new Error("mfe-projects no expone 'ProjectSummaryWidget'");
+        }
+        this.widget.set(widget as Type<unknown>);
         this.cargando.set(false);
       })
       .catch((err: unknown) => {
