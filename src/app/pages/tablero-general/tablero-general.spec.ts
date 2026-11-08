@@ -1,15 +1,20 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { TableroGeneral } from './tablero-general';
 
 describe('TableroGeneral', () => {
   it('muestra KPIs y distribucion con la semilla', async () => {
     await TestBed.configureTestingModule({
       imports: [TableroGeneral],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     const fixture = TestBed.createComponent(TableroGeneral);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
+
+    const nav = el.querySelectorAll('ph-section-nav a');
+    expect(nav.length).toBe(2);
 
     const kpis = Array.from(el.querySelectorAll('.kpis ph-summary-widget')).length;
     expect(kpis).toBe(4);

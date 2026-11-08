@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
-import { IntlFormat } from '@projecthub/ui';
+import { IntlFormat, SectionNav } from '@projecthub/ui';
 import { ProjectStore, descargarArchivo, nombreConFecha, serializarCsv } from '@projecthub/shared';
 
 interface FilaPresupuesto {
@@ -19,13 +19,19 @@ interface FilaPresupuesto {
 @Component({
   selector: 'app-presupuesto',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatButton],
+  imports: [SectionNav, MatButton],
   templateUrl: './presupuesto.html',
   styleUrl: './presupuesto.scss',
 })
 export class Presupuesto {
   private readonly store = inject(ProjectStore);
   protected readonly intl = inject(IntlFormat);
+
+  /** Navegacion de secciones de reportes (ruta tecnica proyecto-widget excluida). */
+  protected readonly navLinks = [
+    { ruta: '/reports', etiqueta: 'Tablero general' },
+    { ruta: '/reports/presupuesto', etiqueta: 'Presupuesto' },
+  ];
 
   protected readonly filas = computed<FilaPresupuesto[]>(() =>
     this.store

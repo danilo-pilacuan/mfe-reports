@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
-import { IntlFormat, SummaryWidget } from '@projecthub/ui';
+import { IntlFormat, SectionNav, SummaryWidget } from '@projecthub/ui';
 import {
   ETAPAS_CICLO_VIDA,
   ETIQUETA_ETAPA,
@@ -18,13 +18,19 @@ import {
 @Component({
   selector: 'app-tablero-general',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SummaryWidget, MatButton],
+  imports: [SectionNav, SummaryWidget, MatButton],
   templateUrl: './tablero-general.html',
   styleUrl: './tablero-general.scss',
 })
 export class TableroGeneral {
   private readonly store = inject(ProjectStore);
   protected readonly intl = inject(IntlFormat);
+
+  /** Navegacion de secciones de reportes (ruta tecnica proyecto-widget excluida). */
+  protected readonly navLinks = [
+    { ruta: '/reports', etiqueta: 'Tablero general' },
+    { ruta: '/reports/presupuesto', etiqueta: 'Presupuesto' },
+  ];
 
   protected readonly resumenes = computed(() => this.store.resumenes());
 
