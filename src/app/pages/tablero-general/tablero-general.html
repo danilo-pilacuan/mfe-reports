@@ -19,28 +19,35 @@
   />
 </div>
 
-<section class="distribucion">
-  <h3>Proyectos por etapa del ciclo de vida</h3>
-  <ul class="barras">
-    @for (fila of porEtapa(); track fila.etapa) {
-      <li>
-        <span class="etiqueta">{{ fila.etapa }}</span>
-        <span class="barra" [style.width.%]="totalProyectos() === 0 ? 0 : (fila.cantidad * 100) / totalProyectos()"></span>
-        <span class="cantidad">{{ fila.cantidad }}</span>
-      </li>
-    }
-  </ul>
-</section>
+@if (totalProyectos() === 0) {
+  <p class="vacio" role="status">
+    Sin proyectos en el portafolio: crea el primero desde la seccion Proyectos para poblar este
+    tablero.
+  </p>
+} @else {
+  <section class="distribucion">
+    <h3>Proyectos por etapa del ciclo de vida</h3>
+    <ul class="barras">
+      @for (fila of porEtapa(); track fila.etapa) {
+        <li>
+          <span class="etiqueta">{{ fila.etapa }}</span>
+          <span class="barra" [style.width.%]="totalProyectos() === 0 ? 0 : (fila.cantidad * 100) / totalProyectos()"></span>
+          <span class="cantidad">{{ fila.cantidad }}</span>
+        </li>
+      }
+    </ul>
+  </section>
 
-<section class="distribucion">
-  <h3>Proyectos por estado</h3>
-  <ul class="barras">
-    @for (fila of porEstado(); track fila.estado) {
-      <li>
-        <span class="etiqueta">{{ fila.estado }}</span>
-        <span class="barra" [style.width.%]="totalProyectos() === 0 ? 0 : (fila.cantidad * 100) / totalProyectos()"></span>
-        <span class="cantidad">{{ fila.cantidad }}</span>
-      </li>
-    }
-  </ul>
-</section>
+  <section class="distribucion">
+    <h3>Proyectos por estado</h3>
+    <ul class="barras">
+      @for (fila of porEstado(); track fila.estado) {
+        <li>
+          <span class="etiqueta">{{ fila.estado }}</span>
+          <span class="barra" [style.width.%]="totalProyectos() === 0 ? 0 : (fila.cantidad * 100) / totalProyectos()"></span>
+          <span class="cantidad">{{ fila.cantidad }}</span>
+        </li>
+      }
+    </ul>
+  </section>
+}
